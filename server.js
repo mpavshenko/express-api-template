@@ -49,5 +49,5 @@ module.exports = function ({ config, log }) {
     log.info('Server stopped');
   }
 
-  this.express = app;
+  this.app = app;
 };
