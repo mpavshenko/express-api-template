@@ -1,10 +1,8 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const ut = require('./utils.js');
+const auth = require('./auth.js');
 const version = require('./package.json').version;
-
-const apiVersion = '0.0.1';
 
 module.exports = function ({ config, log }) {
   const app = express();
@@ -15,11 +13,11 @@ module.exports = function ({ config, log }) {
   });
 
   app.get('/version', (req, res, next) => {
-    res.json({ version, apiVersion });
+    res.json({ version });
   })
 
   app.get('/error', () => {
-    throw new Error('Test error')
+    throw new Error('Test error');
   });
 
   app.get('/await', ut.sync(async (req, res) => {
@@ -27,12 +25,14 @@ module.exports = function ({ config, log }) {
     res.send('await ok');
   }))
 
+  app.use('/api', auth, require('./api'));
+
   app.use(function (err, req, res, next) {
     log.error(`${req.method} ${req.originalUrl}\n${err.stack}`);
     const error = config.sendErrorToClient
       ? err.message
-      : 'Internal server error';
-    res.status(500).send({ error })
+      : 'Internal server error.';
+    res.status(500).send({ error });
   });
 
   let appInstance;

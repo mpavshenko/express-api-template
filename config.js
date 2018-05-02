@@ -15,7 +15,7 @@ module.exports = {
   test: {
     server: {
       port: 9001
-    }
+    },
   },
 
   prod: {
