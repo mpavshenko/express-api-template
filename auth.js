@@ -2,7 +2,7 @@ const passport = require('passport');
 const BearerStrategy = require('passport-http-bearer').Strategy;
 
 function authUser(token, done) {
-  if (token)
+  if (token == 'mytoken')
     return done(null, { userId: token });
   else
     return done(null, false);

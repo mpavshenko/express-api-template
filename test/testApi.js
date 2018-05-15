@@ -30,9 +30,8 @@ describe('Service:', () => {
 
   it('should return pong on ping', async () => {
     var res = await request(app)
-      .get('/api/ping?access_token=xxx')
+      .get('/api/ping?access_token=mytoken')
       .expect(200);
-
     res.text.should.be.eql('pong');
   });
 
@@ -42,5 +41,18 @@ describe('Service:', () => {
       .expect(500);
 
     res.body.error.should.be.eql('Internal server error.');
+  });
+
+  it('should login', async () => {
+    var res = await request(app)
+      .post('/api/login?login=admin&password=admin')
+      .expect(200);
+    res.body.access_token.should.be.eql('mytoken');
+  });
+
+  it('should not login with wrong creds', async () => {
+    var res = await request(app)
+      .post('/api/login?login=admin&password=admin')
+      .expect(200);
   });
 })

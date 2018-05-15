@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --full-trace"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "mocha": "^5.1.1",
+    "reload": "^2.2.2",
     "should": "^13.2.1",
     "supertest": "^3.0.0"
   }

@@ -9,7 +9,8 @@ module.exports = {
       maxFiles: 10,
       level: 'debug'
     },
-    sendErrorToClient: true
+    sendErrorToClient: true,
+    reload: true
   },
 
   test: {
