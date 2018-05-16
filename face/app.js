@@ -35,6 +35,11 @@ function signIn() {
       });
 }
 
+function signOut() {
+  $.cookie('access_token', null);
+  route('login');
+}
+
 (function () {
   window.onhashchange = routing;
 
@@ -51,7 +56,7 @@ function signIn() {
 
   routing();
   
-  $.api.get('/auth', function(data) {
+  $.api.get('/user', function(data) {
     console.log(data);
   })
 })();

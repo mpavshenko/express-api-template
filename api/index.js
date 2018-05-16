@@ -6,10 +6,6 @@ module.exports = router;
 
 apiVersion = '0.0.1';
 
-router.get('/auth', (req, res) => {
-  res.send(req.user);
-});
-
 router.get('/ping', (req, res) => {
   log.info(req.user);
   res.send('pong');

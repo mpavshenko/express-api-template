@@ -31,6 +31,11 @@ module.exports = function ({ config, log }) {
     res.send('await ok');
   }));
 
+
+  app.get('/api/user', auth, (req, res) => {
+    res.send(req.user);
+  });
+
   app.post('/api/login', ut.sync(async (req, res) => {
     var login = req.query.login || req.body.login;
     var password = req.query.password || req.body.password;
