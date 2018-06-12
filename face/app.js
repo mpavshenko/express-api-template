@@ -1,7 +1,36 @@
-function render(selector, template, model) {
-  axios.get('./' + template + '.html').then(function(res) {
+const g = {
+  page: null,
+  view: null,
+}
+
+const pages = {
+  login: true,
+  main: {
+    status: true,
+    conf: true
+  },
+  page_not_found: true
+};
+
+function routing() {
+  const params = window.location.hash.substr(1).split('/');
+  g.page = params[0];
+  g.view = params[1];
+  if (!g.page)
+    route('main/status');
+  else if (!pages[g.page])
+    route('page_not_found');
+  else
+    render('#page', g.page, {}, () => {
+      if (pages[g.page][g.view]) render('#view', g.view, {});
+    });
+};
+
+function render(selector, template, model, cb) {
+  axios.get('./view/' + template + '.html').then(function (res) {
     var html = Mustache.to_html(res.data, model);
     $(selector).html(html);
+    if (cb) cb();
   });
 }
 
@@ -9,30 +38,18 @@ function route(path) {
   window.location.hash = path;
 }
 
-const pages = ['login', 'home', 'page-not-found'];
-
-function routing() {
-  var params = window.location.hash.substr(1).split('/');
-  var page = params[0];
-  if (!page) 
-    route('home');
-  else if (!pages.includes(page))
-    route('page-not-found');
-  else
-    render('#page', page, {});
-};
-
 function signIn() {
   var login = $('#input-login').val();
   var password = $('#input-password').val();
   $.api.post('/login', { login: login, password: password })
-      .then(function(res) {
-          $.cookie('access_token', res.data.access_token);
-          route('home');
-      })
-      .catch(function(error) {
-          $('#error-msg').show();
-      });
+    .then(function (res) {
+      $.cookie('access_token', res.data.access_token);
+      initApi();
+      route('main/status');
+    })
+    .catch(function (error) {
+      $('#error-msg').show();
+    });
 }
 
 function signOut() {
@@ -40,12 +57,10 @@ function signOut() {
   route('login');
 }
 
-(function () {
-  window.onhashchange = routing;
-
+function initApi() {
   $.api = axios.create({
     baseURL: '/api/',
-    headers: { 'Authorization' : 'Bearer ' + $.cookie('access_token') },
+    headers: { 'Authorization': 'Bearer ' + $.cookie('access_token') },
     validateStatus: function (status) {
       if (status == 403 || status == 401) {
         route('login');
@@ -53,10 +68,11 @@ function signOut() {
       return status >= 200 && status < 300;
     },
   });
+};
 
+// main()
+(function () {
+  window.onhashchange = routing;
+  initApi();
   routing();
-  
-  $.api.get('/user', function(data) {
-    console.log(data);
-  })
 })();

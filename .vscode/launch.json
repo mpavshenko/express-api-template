@@ -11,7 +11,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Mocha Tests",
+      "name": "Test",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       // "console": "integratedTerminal",
       "args": [
@@ -29,8 +29,15 @@
       "type": "node",
       "request": "launch",
       "console": "integratedTerminal",
-      "name": "Launch Program",
+      "name": "Run",
       "program": "${workspaceFolder}/index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "console": "internalConsole",
+      "name": "Run cur",
+      "program": "${file}"
     }
   ]
 }

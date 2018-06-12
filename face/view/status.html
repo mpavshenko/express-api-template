@@ -1,0 +1,10 @@
+<pre id="status-container">
+</pre>
+
+<script>
+  $.api.get('/status').then(function (res) {
+    console.log(res.data);
+    const status = highlightJson(JSON.stringify(res.data, null, 4));
+    $('#status-container').html(status);
+  });
+</script>

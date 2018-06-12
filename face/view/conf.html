@@ -1,0 +1,9 @@
+<pre id="conf-container">
+</pre>
+
+<script>
+  $.api.get('/conf').then(function (res) {
+    const conf = highlightJson(JSON.stringify(res.data, null, 4));
+    $('#conf-container').html(conf);
+  });
+</script>

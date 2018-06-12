@@ -20,18 +20,26 @@ function logStartupInfo() {
   log.info(JSON.stringify(config, null, 4));
 }
 
-async function main() {
-  logSetup.configure(config.log);
-  logStartupInfo(env);
-
+async function runServer() {
   const server = new Server({ config, log });
   await server.listen();
   log.info('Getting server version...');
   const version = await request(`http://localhost:${config.server.port}/version`);
   log.info(version);
 
-  process.on('SIGINT', async function () {
+  return server;
+}
+
+async function main() {
+  logSetup.configure(config.log);
+  logStartupInfo(env);
+
+  const server = await runServer();
+
+  process.on('SIGINT', async () => {
+    mics.forEach(mic => mic.stop());
     await server.close();
+    process.exit(0);
   });
 }
 

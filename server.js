@@ -1,12 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const ut = require('./utils.js');
-const auth = require('./auth.js');
-const version = require('./package.json').version;
 const path = require('path');
 const reload = require('reload');
 const process = require('process');
+const ut = require('./utils.js');
+const auth = require('./auth.js');
+const api = require('./api');
+const version = require('./package.json').version;
 
 module.exports = function ({ config, log }) {
   const app = express();
@@ -49,7 +50,7 @@ module.exports = function ({ config, log }) {
     }
   }));
 
-  app.use('/api', auth, require('./api'));
+  app.use('/api', auth, api({ config }));
 
   const facePath = path.join(__dirname, 'face');
   app.use('/', express.static(facePath));
@@ -77,7 +78,6 @@ module.exports = function ({ config, log }) {
   this.close = async () => {
     log.info('Stopping HTTP server...');
     await appInstance.close();
-    process.exit(0);
     log.info('Server stopped');
   }
 

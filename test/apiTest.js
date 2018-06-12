@@ -32,6 +32,12 @@ describe('Service:', () => {
       .expect(200, 'pong');
   });
 
+  it('should return status', async () => {
+    var res = await request(app)
+      .get('/api/status?access_token=mytoken')
+      .expect(200);
+  });
+
   it('should not return error to client', async () => {
     var res = await request(app)
       .get('/error')

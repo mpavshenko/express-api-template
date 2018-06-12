@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec",
+    "nd": "nodemon --ext html,css,js"
   },
   "author": "",
   "license": "ISC",

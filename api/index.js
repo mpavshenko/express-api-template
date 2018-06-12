@@ -1,17 +1,21 @@
-const router = require('express').Router();
+const express = require('express');
 const log = require('winston');
 
 
-module.exports = router;
+module.exports = function ({ config }) {
+  const apiVersion = '0.0.1';
+  const router = express.Router();
 
-apiVersion = '0.0.1';
+  router.get('/ping', (req, res) => {
+    log.info(req.user);
+    res.send('pong');
+  }); 
 
-router.get('/ping', (req, res) => {
-  log.info(req.user);
-  res.send('pong');
-});
+  router.get('/conf', (req, res) => {
+    res.send(config);
+  });
 
+  router.use('/status', require('./status.js'));
 
-
-// router.use('/tournaments', require('./tournaments.js'));
-// router.use('/players', require('./players.js'));
+  return router;
+}
